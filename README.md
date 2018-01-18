@@ -19,6 +19,7 @@ bool arr[10000] = { false };
 void Sum(void *p)
 
 {
+
 	auto value = static_cast<int*>(p);
 	
 	printf("Stop 1 %d\n", *value);
@@ -29,6 +30,7 @@ void Sum(void *p)
 void Sum1(void *p)
 
 {
+
 	auto value = static_cast<int*>(p);
 	
 	printf("Stop 2 %d\n", *value);
@@ -39,6 +41,7 @@ void Sum1(void *p)
 void Sum2(void *p)
 
 {
+
 	auto value = static_cast<int*>(p);
 	
 	printf("Stop 3 %d\n", *value);
@@ -51,6 +54,7 @@ void Sum2(void *p)
 void Sum24(void *p)
 
 {
+
 	auto value = static_cast<double*>(p);
 	
 	printf("Stop 4 %lf\n", *value);
@@ -61,6 +65,7 @@ void Sum24(void *p)
 void Check(void *p)
 
 {
+
 	auto value = static_cast<int*>(p);
 	
 	int num = *value;
@@ -78,12 +83,15 @@ void Check(void *p)
 struct Test
 
 {
+
 	int test;
+	
 };
 
 int main()
 
 {
+
 	CIOCPThreadPool threadpool;
 	
 	threadpool.Init(3);
