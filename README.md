@@ -17,7 +17,6 @@ bool stop4 = true;
 bool arr[10000] = { false };
 
 void Sum(void *p)
-
 {
 
 	auto value = static_cast<int*>(p);
@@ -28,7 +27,6 @@ void Sum(void *p)
 }
 
 void Sum1(void *p)
-
 {
 
 	auto value = static_cast<int*>(p);
@@ -39,7 +37,6 @@ void Sum1(void *p)
 }
 
 void Sum2(void *p)
-
 {
 
 	auto value = static_cast<int*>(p);
@@ -52,7 +49,6 @@ void Sum2(void *p)
 }
 
 void Sum24(void *p)
-
 {
 
 	auto value = static_cast<double*>(p);
@@ -63,7 +59,6 @@ void Sum24(void *p)
 }
 
 void Check(void *p)
-
 {
 
 	auto value = static_cast<int*>(p);
@@ -79,9 +74,7 @@ void Check(void *p)
 	Sleep(1);
 }
 
-
 struct Test
-
 {
 
 	int test;
@@ -89,7 +82,6 @@ struct Test
 };
 
 int main()
-
 {
 
 	CIOCPThreadPool threadpool;
@@ -118,11 +110,13 @@ int main()
 	
 	for (int i = 0; i < 10000; i++)
 	{
+	
 		auto val = new int(i);
 		
 		threadpool.InsertQueueItem(std::bind(Sum2, std::placeholders::_1), val);
 		
 		threadpool.InsertQueueItem(std::bind(Check, std::placeholders::_1), val);
+		
 	}
 	getchar();
 	
