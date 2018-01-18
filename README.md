@@ -1,27 +1,35 @@
 # Cpp-IOCPThreadPool
 
-#How to Use
+How to Use
 
 #include "stdafx.h"
+
 #include "../Debug/include/IOCPThreadPool.h"
-{
+
 bool stop1 = true;
+
 bool stop2 = true;
+
 bool stop3 = true;
+
 bool stop4 = true;
+
 bool arr[10000] = { false };
+
 void Sum(void *p)
 {
 	auto value = static_cast<int*>(p);
 	printf("Stop 1 %d\n", *value);
 	stop1 = false;
 }
+
 void Sum1(void *p)
 {
 	auto value = static_cast<int*>(p);
 	printf("Stop 2 %d\n", *value);
 	stop2 = false;
 }
+
 void Sum2(void *p)
 {
 	auto value = static_cast<int*>(p);
@@ -29,6 +37,7 @@ void Sum2(void *p)
 	stop3 = false;
 	Sleep(1);
 }
+
 void Sum24(void *p)
 {
 	auto value = static_cast<double*>(p);
@@ -52,6 +61,7 @@ struct Test
 {
 	int test;
 };
+
 int main()
 {
 	CIOCPThreadPool threadpool;
@@ -78,6 +88,4 @@ int main()
 	getchar();
 	threadpool.Stop();
     return 0;
-}
-
 }
