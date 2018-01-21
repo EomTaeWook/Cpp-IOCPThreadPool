@@ -53,10 +53,7 @@ bool CIOCPThreadPool::Stop()
 }
 bool CIOCPThreadPool::InsertQueueItem(WaitCallback waitCallback, void* args)
 {
-	std::unique_ptr<Finally> finallyObj (new Finally([&]
-	{
-		LeaveCriticalSection(&cs);
-	}));
+	std::unique_ptr<Finally> finallyObj(new Finally(std::bind(&LeaveCriticalSection, &cs)));
 	try
 	{
 		EnterCriticalSection(&cs);
