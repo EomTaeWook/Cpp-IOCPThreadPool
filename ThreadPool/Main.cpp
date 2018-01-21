@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "../x64/Debug/include/IOCPThreadPool.h"
+#include "../Release/x64/include/IOCPThreadPool.h"
 
 bool stop1 = true;
 bool stop2 = true;
