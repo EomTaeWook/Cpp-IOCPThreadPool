@@ -46,7 +46,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -72,17 +72,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>$(ProjectName)</TargetName>
-    <OutDir>$(SolutionDir)Lib\$(Configuration)\</OutDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+    <OutDir>$(SolutionDir)$(Configuration)\$(PlatformTarget)</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\$(PlatformTarget)</OutDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+    <IntDir>$(SolutionDir)$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\$(PlatformTarget)</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\$(PlatformTarget)</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -103,8 +111,14 @@
       </AdditionalOptions>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)*.h" "$(SolutionDir)$(Platform)\$(Configuration)\include"</Command>
+      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")
+copy "$(ProjectDir)*.h" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include"
+IF EXIST "$(SolutionDir)Lib" (copy "$(SolutionDir)Lib\*.lib" "$(SolutionDir)$(Configuration)\$(PlatformTarget)")
+IF EXIST "$(SolutionDir)Include" (xcopy "$(SolutionDir)Include\*.*" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -120,8 +134,14 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)*.h" "$(SolutionDir)$(Platform)\$(Configuration)\include"</Command>
+      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")
+copy "$(ProjectDir)*.h" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include"
+IF EXIST "$(SolutionDir)Lib" (copy "$(SolutionDir)Lib\*.lib" "$(SolutionDir)$(Configuration)\$(PlatformTarget)")
+IF EXIST "$(SolutionDir)Include" (xcopy "$(SolutionDir)Include\*.*" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -140,12 +160,18 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)*.h" "$(SolutionDir)$(Platform)\$(Configuration)\include"</Command>
+      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")
+copy "$(ProjectDir)*.h" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include"
+IF EXIST "$(SolutionDir)Lib" (copy "$(SolutionDir)Lib\*.lib" "$(SolutionDir)$(Configuration)\$(PlatformTarget)")
+IF EXIST "$(SolutionDir)Include" (xcopy "$(SolutionDir)Include\*.*" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -160,8 +186,14 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)*.h" "$(SolutionDir)$(Platform)\$(Configuration)\include"</Command>
+      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")
+copy "$(ProjectDir)*.h" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include"
+IF EXIST "$(SolutionDir)Lib" (copy "$(SolutionDir)Lib\*.lib" "$(SolutionDir)$(Configuration)\$(PlatformTarget)")
+IF EXIST "$(SolutionDir)Include" (xcopy "$(SolutionDir)Include\*.*" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
