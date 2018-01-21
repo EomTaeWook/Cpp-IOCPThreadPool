@@ -1,13 +1,13 @@
 #pragma once
 #include<functional>
-//ÀÛ¼ºÀÚ ¾öÅÂ¿í
-//C# Java ¾ğ¾îÀÇ try catch finally Ã³·³ ½ÇÇàÇÏ±â À§ÇØ
-//ÇÔ¼ö¸¦ ¹ş¾î³¯¶§ ¼Ò¸êÀÚ¸¦ »ç¿ëÇÏ´Â ½º¸¶Æ® Æ÷ÀÎÅÍ·Î Finall ±¸¹® ½ÇÇà
+//ì‘ì„±ì ì—„íƒœìš±
+//C# Java ì–¸ì–´ì˜ try catch finally ì²˜ëŸ¼ ì‹¤í–‰í•˜ê¸° ìœ„í•´
+//í•¨ìˆ˜ë¥¼ ë²—ì–´ë‚ ë•Œ ì†Œë©¸ìë¥¼ ì‚¬ìš©í•˜ëŠ” ìŠ¤ë§ˆíŠ¸ í¬ì¸í„°ë¡œ Finally êµ¬ë¬¸ ì‹¤í–‰
 class Finally
 {
 private:
 	std::function<void(void)> pFunc;
 public:
-	Finally(std::function<void(void)> pFunc);
+	Finally(std::function<void(void)> pFunc=nullptr);
 	~Finally();
 };
