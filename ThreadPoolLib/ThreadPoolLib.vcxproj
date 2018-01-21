@@ -202,7 +202,6 @@ IF EXIST "$(SolutionDir)Include" (xcopy "$(SolutionDir)Include\*.*" "$(SolutionD
     <ClInclude Include="WaitCallback.h" />
     <ClInclude Include="Finally.h" />
     <ClInclude Include="IOCPThreadPool.h" />
-    <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WaitCallback.cpp" />
