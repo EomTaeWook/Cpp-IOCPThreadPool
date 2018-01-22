@@ -25,9 +25,10 @@ public:
 		DeleteCriticalSection(&cs);
 	}
 	bool Init(unsigned int threadSize = 0);
-	bool Stop();
+	
 	bool InsertQueueItem(WaitCallback waitCallback, void* args);
 private:
+	bool Stop();
 	bool DeleteItem(CWaitCallback* WaitCallback);
 	int Run();
 	static unsigned int __stdcall WorkerThread(void*);
