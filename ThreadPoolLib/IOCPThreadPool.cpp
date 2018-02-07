@@ -99,6 +99,7 @@ bool CIOCPThreadPool::DeleteItem(CWaitCallback* waitCallback)
 	if (waitCallback)
 	{
 		delete waitCallback;
+		waitCallback = NULL;
 		return true;
 	}
 	return false;
