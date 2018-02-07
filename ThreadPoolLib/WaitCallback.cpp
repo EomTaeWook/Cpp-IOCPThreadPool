@@ -2,10 +2,10 @@
 
 namespace Threading
 {
-	CWaitCallback::CWaitCallback(WaitCallback callback, void* p_obj)
+	CWaitCallback::CWaitCallback(WaitCallback callback, void* obj)
 	{
-		this->func = callback;
-		this->p_obj = p_obj;
+		this->_func = callback;
+		this->_obj = obj;
 	}
 	CWaitCallback::~CWaitCallback()
 	{

@@ -4,9 +4,9 @@
 //함수를 벗어날때 소멸자를 사용하는 스마트 포인터로 Finally 구문 실행
 Finally::Finally(std::function<void(void)> pFunc)
 {
-	this->pFunc = pFunc;
+	this->_func = pFunc;
 }
 Finally::~Finally()
 {
-	if (pFunc != nullptr) pFunc();
+	if (_func != nullptr) _func();
 }

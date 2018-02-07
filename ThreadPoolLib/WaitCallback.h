@@ -7,16 +7,16 @@ namespace Threading
 	{
 		friend class CIOCPThreadPool;
 	private:
-		std::function<void(void*)> func;
-		void* p_obj;
+		std::function<void(void*)> _func;
+		void* _obj;
 	private:
 		void Run();
 	public:
-		CWaitCallback(WaitCallback callback, void* p_obj = NULL);
+		CWaitCallback(WaitCallback callback, void* obj = NULL);
 		~CWaitCallback();
 	};
 	inline void CWaitCallback::Run()
 	{
-		this->func(this->p_obj);
+		this->_func(this->_obj);
 	}
 }

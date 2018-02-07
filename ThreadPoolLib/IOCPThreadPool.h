@@ -11,20 +11,20 @@ namespace Threading
 	class CIOCPThreadPool
 	{
 	private:
-		HANDLE completionPort;
-		std::vector<HANDLE> hWorkerThread;
-		unsigned int thread_Max_Size;
-		CRITICAL_SECTION cs;
+		HANDLE _completionPort;
+		std::vector<HANDLE> _hWorkerThread;
+		unsigned int _thread_Max_Size;
+		CRITICAL_SECTION _cs;
 	public:
 		CIOCPThreadPool()
 		{
-			completionPort = NULL;
-			InitializeCriticalSection(&cs);
+			_completionPort = NULL;
+			InitializeCriticalSection(&_cs);
 		}
 		~CIOCPThreadPool()
 		{
 			Stop();
-			DeleteCriticalSection(&cs);
+			DeleteCriticalSection(&_cs);
 		}
 		bool Init(unsigned int threadSize = 0);
 

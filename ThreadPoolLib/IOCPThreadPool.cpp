@@ -10,8 +10,8 @@ namespace Threading
 		{
 			return false;
 		}
-		completionPort = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
-		if (completionPort == INVALID_HANDLE_VALUE)
+		_completionPort = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+		if (_completionPort == INVALID_HANDLE_VALUE)
 			return false;
 
 		SYSTEM_INFO info;
@@ -20,50 +20,50 @@ namespace Threading
 		if (threadMaxSize > 0)
 		{
 			if (info.dwNumberOfProcessors * 2 < threadMaxSize)
-				thread_Max_Size = info.dwNumberOfProcessors * 2;
+				_thread_Max_Size = info.dwNumberOfProcessors * 2;
 			else
-				thread_Max_Size = threadMaxSize;
+				_thread_Max_Size = threadMaxSize;
 		}
 		else
 		{
-			thread_Max_Size = info.dwNumberOfProcessors * 2;
+			_thread_Max_Size = info.dwNumberOfProcessors * 2;
 		}
-		for (unsigned int i = 0; i < thread_Max_Size; i++)
+		for (unsigned int i = 0; i < _thread_Max_Size; i++)
 		{
-			hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, WorkerThread, this, 0, NULL));
+			_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, WorkerThread, this, 0, NULL));
 		}
 		return true;
 	}
 	bool CIOCPThreadPool::Stop()
 	{
-		if (completionPort)
+		if (_completionPort)
 		{
-			for (int i = 0; i < hWorkerThread.size(); i++)
-				PostQueuedCompletionStatus(completionPort, 0, CLOSE_THREAD, NULL);
+			for (int i = 0; i < _hWorkerThread.size(); i++)
+				PostQueuedCompletionStatus(_completionPort, 0, CLOSE_THREAD, NULL);
 
-			for (int i = 0; i < hWorkerThread.size(); i++)
+			for (int i = 0; i < _hWorkerThread.size(); i++)
 			{
-				WaitForSingleObject(hWorkerThread[i], INFINITE);
-				CloseHandle(hWorkerThread[i]);
+				WaitForSingleObject(_hWorkerThread[i], INFINITE);
+				CloseHandle(_hWorkerThread[i]);
 			}
 
-			hWorkerThread.clear();
-			CloseHandle(completionPort);
-			completionPort = NULL;
+			_hWorkerThread.clear();
+			CloseHandle(_completionPort);
+			_completionPort = NULL;
 		}
 		return true;
 	}
 	bool CIOCPThreadPool::InsertQueueItem(WaitCallback waitCallback, void* args)
 	{
-		std::unique_ptr<Finally> finallyObj(new Finally(std::bind(&LeaveCriticalSection, &cs)));
+		std::unique_ptr<Finally> finallyObj(new Finally(std::bind(&LeaveCriticalSection, &_cs)));
 		try
 		{
-			EnterCriticalSection(&cs);
+			EnterCriticalSection(&_cs);
 
 			CWaitCallback* p_waitCallback = new CWaitCallback(waitCallback, args);
-			if (completionPort == NULL) return false;
+			if (_completionPort == NULL) return false;
 			if (waitCallback == NULL) return false;
-			return PostQueuedCompletionStatus(completionPort, 0, (ULONG_PTR)p_waitCallback, NULL);
+			return PostQueuedCompletionStatus(_completionPort, 0, (ULONG_PTR)p_waitCallback, NULL);
 		}
 		catch (...)
 		{
@@ -79,7 +79,7 @@ namespace Threading
 
 		while (true)
 		{
-			if (!GetQueuedCompletionStatus(completionPort, &numberOfBytes, &callback, &pOverlapped, INFINITE))
+			if (!GetQueuedCompletionStatus(_completionPort, &numberOfBytes, &callback, &pOverlapped, INFINITE))
 			{
 				break;
 			}
@@ -101,6 +101,7 @@ bool CIOCPThreadPool::DeleteItem(CWaitCallback* waitCallback)
 	if (waitCallback)
 	{
 		delete waitCallback;
+		waitCallback = NULL;
 		return true;
 	}
 	return false;
