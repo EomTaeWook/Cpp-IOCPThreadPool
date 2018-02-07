@@ -55,7 +55,7 @@ namespace Threading
 	}
 	bool CIOCPThreadPool::InsertQueueItem(WaitCallback waitCallback, void* args)
 	{
-		std::unique_ptr<Finally> finallyObj(new Finally(std::bind(&LeaveCriticalSection, &_cs)));
+		std::unique_ptr<Finally> finally(new Finally(std::bind(&LeaveCriticalSection, &_cs)));
 		try
 		{
 			EnterCriticalSection(&_cs);
@@ -106,8 +106,8 @@ bool CIOCPThreadPool::DeleteItem(CWaitCallback* waitCallback)
 	}
 	return false;
 }
-unsigned int __stdcall CIOCPThreadPool::WorkerThread(void* p_obj)
+unsigned int __stdcall CIOCPThreadPool::WorkerThread(void* obj)
 {
-	CIOCPThreadPool* p_th = static_cast<CIOCPThreadPool*>(p_obj);
+	CIOCPThreadPool* p_th = static_cast<CIOCPThreadPool*>(obj);
 	return p_th->Run();
 }
