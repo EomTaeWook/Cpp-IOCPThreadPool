@@ -6,8 +6,8 @@
 class Finally
 {
 private:
-	std::function<void(void)> pFunc;
+	std::function<void(void)> func;
 public:
-	Finally(std::function<void(void)> pFunc=nullptr);
+	Finally(std::function<void(void)> func =nullptr);
 	~Finally();
 };
