@@ -85,29 +85,28 @@ namespace Threading
 			}
 			if ((int)callback == CLOSE_THREAD) break;
 
-			CWaitCallback* pCallback = reinterpret_cast<CWaitCallback*>(callback);
-			if (pCallback != NULL)
-			{
-				pCallback->Run();
-				DeleteItem(pCallback);
-			}
-			else
-				continue;
-		}
-		return 0;
-	}
-	bool CIOCPThreadPool::DeleteItem(CWaitCallback* waitCallback)
-	{
-		if (waitCallback)
+		CWaitCallback* pCallback = reinterpret_cast<CWaitCallback*>(callback);
+		if (pCallback != NULL)
 		{
-			delete waitCallback;
-			return true;
+			pCallback->Run();
+			DeleteItem(pCallback);
 		}
-		return false;
+		else
+			continue;
 	}
-	unsigned int __stdcall CIOCPThreadPool::WorkerThread(void* p_obj)
+	return 0;
+}
+bool CIOCPThreadPool::DeleteItem(CWaitCallback* waitCallback)
+{
+	if (waitCallback)
 	{
-		CIOCPThreadPool* p_th = static_cast<CIOCPThreadPool*>(p_obj);
-		return p_th->Run();
+		delete waitCallback;
+		return true;
 	}
+	return false;
+}
+unsigned int __stdcall CIOCPThreadPool::WorkerThread(void* p_obj)
+{
+	CIOCPThreadPool* p_th = static_cast<CIOCPThreadPool*>(p_obj);
+	return p_th->Run();
 }

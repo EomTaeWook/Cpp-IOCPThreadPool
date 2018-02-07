@@ -120,7 +120,6 @@ int main()
 	}
 	getchar();
 	
-	threadpool.Stop();
 	
     return 0;
 	
