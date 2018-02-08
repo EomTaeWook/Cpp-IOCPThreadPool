@@ -33,7 +33,7 @@ namespace Threading
 	std::shared_ptr<T> Threading::Singleton<T>::_instance = NULL;
 
 	#define CLOSE_THREAD -1
-	class CIOCPThreadPool
+	class CIOCPThreadPool : public Singleton<CIOCPThreadPool>
 	{
 	private:
 		HANDLE _completionPort;
