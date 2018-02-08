@@ -6,31 +6,38 @@ namespace Threading
 {
 	bool CIOCPThreadPool::Init(unsigned int threadMaxSize)
 	{
-		if (!Stop())
+		try
 		{
-			return false;
-		}
-		_completionPort = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
-		if (_completionPort == INVALID_HANDLE_VALUE)
-			return false;
+			if (!Stop())
+			{
+				return false;
+			}
+			_completionPort = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+			if (_completionPort == INVALID_HANDLE_VALUE)
+				return false;
 
-		SYSTEM_INFO info;
-		GetSystemInfo(&info);
+			SYSTEM_INFO info;
+			GetSystemInfo(&info);
 
-		if (threadMaxSize > 0)
-		{
-			if (info.dwNumberOfProcessors * 2 < threadMaxSize)
-				_thread_Max_Size = info.dwNumberOfProcessors * 2;
+			if (threadMaxSize > 0)
+			{
+				if (info.dwNumberOfProcessors * 2 < threadMaxSize)
+					_thread_Max_Size = info.dwNumberOfProcessors * 2;
+				else
+					_thread_Max_Size = threadMaxSize;
+			}
 			else
-				_thread_Max_Size = threadMaxSize;
+			{
+				_thread_Max_Size = info.dwNumberOfProcessors * 2;
+			}
+			for (unsigned int i = 0; i < _thread_Max_Size; i++)
+			{
+				_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, WorkerThread, this, 0, NULL));
+			}
 		}
-		else
+		catch (...)
 		{
-			_thread_Max_Size = info.dwNumberOfProcessors * 2;
-		}
-		for (unsigned int i = 0; i < _thread_Max_Size; i++)
-		{
-			_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, WorkerThread, this, 0, NULL));
+			return false;
 		}
 		return true;
 	}
@@ -55,13 +62,13 @@ namespace Threading
 	}
 	bool CIOCPThreadPool::InsertQueueItem(WaitCallback waitCallback, void* args)
 	{
+		if (_completionPort == NULL) return false;
 		std::unique_ptr<Finally> finally(new Finally(std::bind(&LeaveCriticalSection, &_cs)));
 		try
 		{
 			EnterCriticalSection(&_cs);
 
 			CWaitCallback* p_waitCallback = new CWaitCallback(waitCallback, args);
-			if (_completionPort == NULL) return false;
 			if (waitCallback == NULL) return false;
 			return PostQueuedCompletionStatus(_completionPort, 0, (ULONG_PTR)p_waitCallback, NULL);
 		}
