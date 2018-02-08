@@ -63,11 +63,11 @@ namespace Threading
 	bool CIOCPThreadPool::InsertQueueItem(WaitCallback waitCallback, void* args)
 	{
 		if (_completionPort == NULL) return false;
-		std::unique_ptr<Finally> finally(new Finally(std::bind(&LeaveCriticalSection, &_cs)));
+
+		std::unique_ptr<Finally> finallyObj(new Finally(std::bind(&LeaveCriticalSection, &_cs)));
 		try
 		{
 			EnterCriticalSection(&_cs);
-
 			CWaitCallback* p_waitCallback = new CWaitCallback(waitCallback, args);
 			if (waitCallback == NULL) return false;
 			return PostQueuedCompletionStatus(_completionPort, 0, (ULONG_PTR)p_waitCallback, NULL);
@@ -92,27 +92,28 @@ namespace Threading
 			}
 			if ((int)callback == CLOSE_THREAD) break;
 
-		CWaitCallback* pCallback = reinterpret_cast<CWaitCallback*>(callback);
-		if (pCallback != NULL)
-		{
-			pCallback->Run();
-			DeleteItem(pCallback);
+			CWaitCallback* pCallback = reinterpret_cast<CWaitCallback*>(callback);
+			if (pCallback != NULL)
+			{
+				pCallback->Run();
+				DeleteItem(pCallback);
+			}
 		}
+		return 0;
 	}
-	return 0;
-}
-bool CIOCPThreadPool::DeleteItem(CWaitCallback* waitCallback)
-{
-	if (waitCallback)
+	bool CIOCPThreadPool::DeleteItem(CWaitCallback* waitCallback)
 	{
-		delete waitCallback;
-		waitCallback = NULL;
-		return true;
+		if (waitCallback)
+		{
+			delete waitCallback;
+			waitCallback = NULL;
+			return true;
+		}
+		return false;
 	}
-	return false;
-}
-unsigned int __stdcall CIOCPThreadPool::WorkerThread(void* obj)
-{
-	CIOCPThreadPool* p_th = static_cast<CIOCPThreadPool*>(obj);
-	return p_th->Run();
+	unsigned int __stdcall CIOCPThreadPool::WorkerThread(void* obj)
+	{
+		CIOCPThreadPool* p_th = static_cast<CIOCPThreadPool*>(obj);
+		return p_th->Run();
+	}
 }

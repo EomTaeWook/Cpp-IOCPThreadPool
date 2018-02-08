@@ -2,7 +2,10 @@
 #include<Windows.h>
 #include<process.h>
 #include<vector>
+#include <memory>
 #include "WaitCallback.h"
+
+#define CLOSE_THREAD -1
 
 //작성자 엄태욱 2018-01-10
 //IOCP 쓰레드 풀
@@ -18,9 +21,8 @@ namespace Threading
 	private:
 		static std::shared_ptr<T> _instance;
 	};
-
 	template <typename T>
-	static std::shared_ptr<T> Singleton<T>::Instance()
+	std::shared_ptr<T> Singleton<T>::Instance()
 	{
 		if (_instance.get() == 0)
 		{
@@ -32,7 +34,6 @@ namespace Threading
 	template <typename T>
 	std::shared_ptr<T> Threading::Singleton<T>::_instance = NULL;
 
-	#define CLOSE_THREAD -1
 	class CIOCPThreadPool : public Singleton<CIOCPThreadPool>
 	{
 	private:
@@ -61,3 +62,4 @@ namespace Threading
 		static unsigned int __stdcall WorkerThread(void*);
 	};
 }
+

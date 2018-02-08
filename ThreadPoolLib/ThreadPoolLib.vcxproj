@@ -196,9 +196,6 @@ IF EXIST "$(SolutionDir)Include" (xcopy "$(SolutionDir)Include\*.*" "$(SolutionD
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="WaitCallback.h" />
     <ClInclude Include="Finally.h" />
     <ClInclude Include="IOCPThreadPool.h" />
