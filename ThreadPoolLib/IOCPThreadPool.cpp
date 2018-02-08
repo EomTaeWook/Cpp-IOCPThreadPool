@@ -98,8 +98,6 @@ namespace Threading
 			pCallback->Run();
 			DeleteItem(pCallback);
 		}
-		else
-			continue;
 	}
 	return 0;
 }
