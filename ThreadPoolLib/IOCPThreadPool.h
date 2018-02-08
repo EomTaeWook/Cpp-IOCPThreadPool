@@ -14,19 +14,19 @@ namespace Threading
 	public:
 		Singleton() {}
 		~Singleton() {}
-		static T Instance();
+		static std::shared_ptr<T> Instance();
 	private:
 		static std::shared_ptr<T> _instance;
 	};
 
 	template <typename T>
-	T Singleton<T>::Instance()
+	static std::shared_ptr<T> Singleton<T>::Instance()
 	{
 		if (_instance.get() == 0)
 		{
 			_instance = std::make_shared<T>();
 		}
-		return *_instance.get();
+		return _instance;
 	}
 
 	template <typename T>
