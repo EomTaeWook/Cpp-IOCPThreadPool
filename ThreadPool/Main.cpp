@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "../Debug/x86/include/IOCPThreadPool.h"
+#include "../ThreadPoolLib/IOCPThreadPool.h"
 
 bool stop1 = true;
 bool stop2 = true;
@@ -53,8 +53,11 @@ struct Test
 };
 int main()
 {
-	CIOCPThreadPool threadpool;
+	Threading::CIOCPThreadPool threadpool;
 	threadpool.Init(3);
+
+	//singleton
+	Threading::CIOCPThreadPool::Instance()->Init();
 
 	int a = 100;
 	Test t;

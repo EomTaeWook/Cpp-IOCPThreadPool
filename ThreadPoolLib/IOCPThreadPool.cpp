@@ -45,10 +45,10 @@ namespace Threading
 	{
 		if (_completionPort)
 		{
-			for (int i = 0; i < _hWorkerThread.size(); i++)
+			for (size_t i = 0; i < _hWorkerThread.size(); i++)
 				PostQueuedCompletionStatus(_completionPort, 0, CLOSE_THREAD, NULL);
 
-			for (int i = 0; i < _hWorkerThread.size(); i++)
+			for (size_t i = 0; i < _hWorkerThread.size(); i++)
 			{
 				WaitForSingleObject(_hWorkerThread[i], INFINITE);
 				CloseHandle(_hWorkerThread[i]);
