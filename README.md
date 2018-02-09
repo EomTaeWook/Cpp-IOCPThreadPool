@@ -87,7 +87,10 @@ int main()
 	CIOCPThreadPool threadpool;
 	
 	threadpool.Init(3);
-
+	
+	//singleton
+	Threading::CIOCPThreadPool::Instance()->Init();
+	
 	int a = 100;
 	
 	Test t;
