@@ -76,7 +76,6 @@ namespace Threading
 		{
 			return false;
 		}
-		return true;
 	}
 	int CIOCPThreadPool::Run()
 	{
