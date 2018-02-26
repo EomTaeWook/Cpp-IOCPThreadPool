@@ -4,7 +4,7 @@
 
 namespace Threading
 {
-	bool CIOCPThreadPool::Init(unsigned int threadMaxSize)
+	bool IOCPThreadPool::Init(unsigned int threadMaxSize)
 	{
 		try
 		{
@@ -41,7 +41,7 @@ namespace Threading
 		}
 		return true;
 	}
-	bool CIOCPThreadPool::Stop()
+	bool IOCPThreadPool::Stop()
 	{
 		if (_completionPort)
 		{
@@ -60,7 +60,7 @@ namespace Threading
 		}
 		return true;
 	}
-	bool CIOCPThreadPool::InsertQueueItem(WaitCallback waitCallback, void* args)
+	bool IOCPThreadPool::InsertQueueItem(Func waitCallback, void* args)
 	{
 		if (_completionPort == NULL) return false;
 
@@ -68,7 +68,7 @@ namespace Threading
 		try
 		{
 			EnterCriticalSection(&_cs);
-			CWaitCallback* p_waitCallback = new CWaitCallback(waitCallback, args);
+			WaitCallback* p_waitCallback = new WaitCallback(waitCallback, args);
 			if (waitCallback == NULL) return false;
 			return PostQueuedCompletionStatus(_completionPort, 0, (ULONG_PTR)p_waitCallback, NULL);
 		}
@@ -77,7 +77,7 @@ namespace Threading
 			return false;
 		}
 	}
-	int CIOCPThreadPool::Run()
+	int IOCPThreadPool::Run()
 	{
 		DWORD numberOfBytes = 0;
 		ULONG_PTR callback = 0;
@@ -91,7 +91,7 @@ namespace Threading
 			}
 			if ((int)callback == CLOSE_THREAD) break;
 
-			CWaitCallback* pCallback = reinterpret_cast<CWaitCallback*>(callback);
+			WaitCallback* pCallback = reinterpret_cast<WaitCallback*>(callback);
 			if (pCallback != NULL)
 			{
 				pCallback->Run();
@@ -100,7 +100,7 @@ namespace Threading
 		}
 		return 0;
 	}
-	bool CIOCPThreadPool::DeleteItem(CWaitCallback* waitCallback)
+	bool IOCPThreadPool::DeleteItem(WaitCallback* waitCallback)
 	{
 		if (waitCallback)
 		{
@@ -110,9 +110,9 @@ namespace Threading
 		}
 		return false;
 	}
-	unsigned int __stdcall CIOCPThreadPool::WorkerThread(void* obj)
+	unsigned int __stdcall IOCPThreadPool::WorkerThread(void* obj)
 	{
-		CIOCPThreadPool* p_th = static_cast<CIOCPThreadPool*>(obj);
+		IOCPThreadPool* p_th = static_cast<IOCPThreadPool*>(obj);
 		return p_th->Run();
 	}
 }

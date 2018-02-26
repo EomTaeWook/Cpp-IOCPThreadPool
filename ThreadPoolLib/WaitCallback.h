@@ -2,20 +2,21 @@
 #include<functional>
 namespace Threading
 {
-	typedef std::function<void(void*)> WaitCallback;
-	class CWaitCallback
+	typedef std::function<void(void*)> Func;
+	class WaitCallback
 	{
-		friend class CIOCPThreadPool;
+		friend class IOCPThreadPool;
 	private:
 		std::function<void(void*)> _func;
 		void* _obj;
 	private:
 		void Run();
 	public:
-		CWaitCallback(WaitCallback callback, void* obj = NULL);
-		~CWaitCallback();
+		WaitCallback(Func callback, void* obj = NULL);
+		~WaitCallback() {}
 	};
-	inline void CWaitCallback::Run()
+
+	inline void WaitCallback::Run()
 	{
 		this->_func(this->_obj);
 	}

@@ -34,7 +34,7 @@ namespace Threading
 	template <typename T>
 	std::shared_ptr<T> Threading::Singleton<T>::_instance = NULL;
 
-	class CIOCPThreadPool : public Singleton<CIOCPThreadPool>
+	class IOCPThreadPool : public Singleton<IOCPThreadPool>
 	{
 	private:
 		HANDLE _completionPort;
@@ -42,22 +42,22 @@ namespace Threading
 		unsigned int _thread_Max_Size;
 		CRITICAL_SECTION _cs;
 	public:
-		CIOCPThreadPool()
+		IOCPThreadPool()
 		{
 			_completionPort = NULL;
 			InitializeCriticalSection(&_cs);
 		}
-		~CIOCPThreadPool()
+		~IOCPThreadPool()
 		{
 			Stop();
 			DeleteCriticalSection(&_cs);
 		}
 		bool Init(unsigned int threadSize = 0);
 
-		bool InsertQueueItem(WaitCallback waitCallback, void* args);
+		bool InsertQueueItem(Func waitCallback, void* args);
 	private:
 		bool Stop();
-		bool DeleteItem(CWaitCallback* WaitCallback);
+		bool DeleteItem(WaitCallback* WaitCallback);
 		int Run();
 		static unsigned int __stdcall WorkerThread(void*);
 	};
