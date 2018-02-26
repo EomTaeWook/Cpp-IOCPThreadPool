@@ -84,12 +84,12 @@ struct Test
 int main()
 {
 
-	CIOCPThreadPool threadpool;
+	IOCPThreadPool threadpool;
 	
 	threadpool.Init(3);
 	
 	//singleton
-	Threading::CIOCPThreadPool::Instance()->Init();
+	Threading::IOCPThreadPool::Instance()->Init();
 	
 	int a = 100;
 	
