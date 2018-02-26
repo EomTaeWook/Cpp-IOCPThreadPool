@@ -53,11 +53,11 @@ struct Test
 };
 int main()
 {
-	Threading::CIOCPThreadPool threadpool;
+	Threading::IOCPThreadPool threadpool;
 	threadpool.Init(3);
 
 	//singleton
-	Threading::CIOCPThreadPool::Instance()->Init();
+	Threading::IOCPThreadPool::Instance()->Init();
 
 	int a = 100;
 	Test t;
@@ -78,7 +78,6 @@ int main()
 		threadpool.InsertQueueItem(std::bind(Check, std::placeholders::_1), val);
 	}
 	getchar();
-	threadpool.Stop();
     return 0;
 }
 
